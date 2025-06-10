@@ -28,6 +28,7 @@ require mathlib from git
 
 @[default_target]
 lean_lib «Simons2025» where
+  globs := #[.submodules `Simons2025]
   moreLeanArgs := moreLeanArgs
   weakLeanArgs := weakLeanArgs
   -- add any library configuration options here
