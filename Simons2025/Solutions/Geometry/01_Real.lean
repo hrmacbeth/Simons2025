@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Heather Macbeth
 -/
 import Mathlib
+import Config.Environment
 
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn
@@ -11,14 +12,8 @@ import Mathlib
 Chapter 3, problems 1-5: Groups of permutations of `ℝ`
 -/
 
+lftcm_init
 noncomputable section
-
--- FIXME
-attribute [-simp] ne_eq
-
--- FIXME
-attribute [-simp] add_sub_cancel_right add_tsub_cancel_right sub_add_cancel add_sub_add_right_eq_sub
-  sub_add_cancel_right
 
 open Equiv
 open MulAction hiding toSMul

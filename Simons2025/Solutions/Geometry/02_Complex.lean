@@ -6,6 +6,7 @@ Authors: Heather Macbeth
 import Mathlib.Analysis.Complex.Circle
 import Mathlib.LinearAlgebra.Determinant
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
+import Config.Environment
 
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn
@@ -13,15 +14,8 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Basic
 Chapter 3, problems 13-38: Groups of permutations of `ℂ`
 -/
 
+lftcm_init
 noncomputable section
-
--- FIXME
-attribute [-simp] ne_eq
-
--- FIXME
-attribute [-simp] add_sub_cancel_right add_tsub_cancel_right sub_add_cancel add_sub_add_right_eq_sub
-  sub_add_cancel_right
-
 
 open Equiv
 open ComplexConjugate
