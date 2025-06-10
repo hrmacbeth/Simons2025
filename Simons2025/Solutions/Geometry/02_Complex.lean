@@ -17,14 +17,13 @@ Chapter 3, problems 13-38: Groups of permutations of `ℂ`
 lftcm_init
 noncomputable section
 
-open Equiv
-open ComplexConjugate
+open Equiv ComplexConjugate
 open Complex (I exp exp_add exp_zero re im)
 open MulAction hiding toSMul
 
 /-! ## Problem 13 -/
 
-/-- Any distance-preserving transformation is called an isometry. -/
+/-- Any distance-preserving transformation is called an *isometry*. -/
 def IsIsometry (α : ℂ → ℂ) : Prop :=
   ∀ z w, ‖α z - α w‖ = ‖z - w‖
 
@@ -33,17 +32,21 @@ the plane `z` and `w`, compare the values of `z - w` and `α z - w z`. -/
 theorem aux1 :
     let α := fun (z : ℂ) ↦ z + 2 * I
     ∀ z w, z - w = α z - α w := by
+  -- sorry --
   intro α z w
   dsimp [α]
   ring
+  -- sorry --
 
 /-- Let `α` denote the function `z ↦ z + 2 * I` as a transformation of `ℂ`. Show that `α` is an
 isometry. -/
 example :
     let α := fun (z : ℂ) ↦ z + 2 * I
     IsIsometry α := by
+  -- sorry --
   intro α z w
   rw [aux1 z w]
+  -- sorry --
 
 /-! ## Problem 14 -/
 
@@ -51,13 +54,17 @@ abbrev translation (c : ℂ) : Perm ℂ where
   toFun := fun x ↦ x + c
   invFun := fun x ↦ x - c
   left_inv := by
+    -- sorry --
     intro y
     dsimp
     ring
+    -- sorry --
   right_inv := by
+    -- sorry --
     intro y
     dsimp
     ring
+    -- sorry --
 
 /-- If, for some given complex number `c`, `α` is the element `z ↦ z + c` of `Perm ℂ`, prove that,
 for any two complex numbers `z` and `w`, `z - w = α z - α w`. Such an element of `Perm ℂ` is called
@@ -65,23 +72,30 @@ a *translation* of `ℂ`. -/
 theorem aux2 (c : ℂ) :
     let α := translation c
     ∀ z w, z - w = α z - α w := by
+  -- sorry --
   intro α z w
   dsimp [α]
   ring
+  -- sorry --
 
 abbrev tSubgroup : Subgroup (Perm ℂ) where
   carrier := { α | ∀ z w : ℂ, α z - α w = z - w }
   mul_mem' := by
+    -- sorry --
     intro α β hα hβ
     dsimp at *
     intro z w
     rw [hα]
     rw [hβ]
+    -- sorry --
   one_mem' := by
+    -- sorry --
     dsimp at *
     intro z w
     rfl
+    -- sorry --
   inv_mem' := by
+    -- sorry --
     intro α hα
     dsimp at *
     intro z w
@@ -89,20 +103,24 @@ abbrev tSubgroup : Subgroup (Perm ℂ) where
     -- rw?
     rw [@Perm.apply_inv_self]
     rw [@Perm.apply_inv_self]
+    -- sorry --
 
 notation "T" => tSubgroup
 
 /-- If `a ∈ T` and `α 0 = c`, prove that `α z = z + c`. -/
 theorem aux3 {α : Perm ℂ} (hα : α ∈ T) {c : ℂ} (hα0 : α 0 = c) : α = translation c := by
+  -- sorry --
   change ∀ _, _ at hα
   ext z
   dsimp
   specialize hα z 0
   rw [hα0] at hα
   linear_combination hα
+  -- sorry --
 
 /-- `T` consists entirely of translations of `ℂ`. -/
 example (α : Perm ℂ) : α ∈ T ↔ ∃ c, α = translation c := by
+  -- sorry --
   constructor
   · intro h
     apply aux3 at h
@@ -115,6 +133,7 @@ example (α : Perm ℂ) : α ∈ T ↔ ∃ c, α = translation c := by
     change ∀ _, _ -- FIXME
     intro z w
     rw [← aux2]
+  -- sorry --
 
 /-! ## Problem 15 -/
 
@@ -123,6 +142,7 @@ abbrev rotation (θ : ℝ) : Perm ℂ where
   toFun := fun z ↦ exp (I * θ) * z
   invFun := fun z ↦ exp (-I * θ) * z
   left_inv := by
+    -- sorry --
     intro z
     dsimp
     trans (exp (-I * θ) * exp (I * θ)) * z
@@ -132,7 +152,9 @@ abbrev rotation (θ : ℝ) : Perm ℂ where
     · ring_nf
     rw [exp_zero]
     ring
+    -- sorry --
   right_inv := by
+    -- sorry --
     intro z
     dsimp
     trans (exp (I * θ) * exp (-I * θ)) * z
@@ -142,9 +164,11 @@ abbrev rotation (θ : ℝ) : Perm ℂ where
     · ring_nf
     rw [exp_zero]
     ring
+    -- sorry --
 
 /-- rotations about `0` are isometries of the plane. -/
 example (θ : ℝ) : IsIsometry (rotation θ) := by
+  -- sorry --
   intro z w
   dsimp
   trans ‖exp (θ * I) * (z - w)‖
@@ -152,6 +176,7 @@ example (θ : ℝ) : IsIsometry (rotation θ) := by
   · rw [norm_mul]
     rw [Complex.norm_exp_ofReal_mul_I] -- FIXME need a comm version?
     ring
+  -- sorry --
 
 /-! ## Problem 16 -/
 
@@ -159,18 +184,23 @@ example (θ : ℝ) : IsIsometry (rotation θ) := by
 abbrev isometrySubgroup : Subgroup (Perm ℂ) where
   carrier := { α | IsIsometry α }
   mul_mem' := by
+    -- sorry --
     intro α β hα hβ
     unfold IsIsometry at *
     dsimp at *
     intro x y
     rw [hα]
     rw [hβ]
+    -- sorry --
   one_mem' := by
+    -- sorry --
     unfold IsIsometry at *
     dsimp at *
     intro x y
     rfl
+    -- sorry --
   inv_mem' := by
+    -- sorry --
     intro α hα
     unfold IsIsometry at *
     dsimp at *
@@ -179,17 +209,20 @@ abbrev isometrySubgroup : Subgroup (Perm ℂ) where
     -- rw?
     rw [@Perm.apply_inv_self]
     rw [@Perm.apply_inv_self]
+    -- sorry --
 
 notation "E" => isometrySubgroup
 
 /-- Show that `E` contains the translation group. -/
 example : T ≤ E := by
+  -- sorry --
   intro α hα
   change ∀ _, _ at hα -- FIXME
   change IsIsometry _ -- FIXME
   dsimp [IsIsometry]
   intro z w
   rw [hα]
+  -- sorry --
 
 /-! ## Problem 17 -/
 section
@@ -199,17 +232,22 @@ abbrev reflectReal : Perm ℂ where
   toFun := conj -- FIXME display
   invFun := conj
   left_inv := by
+    -- sorry --
     intro z
     rw [@Complex.conj_conj]
+    -- sorry --
   right_inv := by
+    -- sorry --
     intro z
     rw [@Complex.conj_conj]
+    -- sorry --
 
 /-- Let `α` denote complex conjugation. -/
 notation "α" => reflectReal
 
 /-- Identify the line of fixed points of complex conjugation. -/
 example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
+  -- sorry --
   ext z
   dsimp
   constructor
@@ -226,19 +264,23 @@ example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
     have : 2 * I ≠ 0 := sorry
     field_simp
     ring
+  -- sorry --
 
 /-- For a point `p`, the line of fixed points of `α` is the perpendicular bisector of `p` and its
 image under `α`. -/
 example (p w : ℂ) (hw : w ∈ { z | α z = z }) : ‖p - w‖ = ‖α p - w‖ := by
+  -- sorry --
   dsimp at hw
   trans ‖α (p - w)‖
   · dsimp
     rw [Complex.norm_conj]
   · dsimp
     rw [map_sub, hw]
+  -- sorry --
 
 /-- `α` is an isometry fixing the points 0 and 1. -/
 example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
+  -- sorry --
   dsimp [IsIsometry]
   constructor
   · intro z w
@@ -250,5 +292,6 @@ example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
   constructor
   · rw [map_zero]
   · rw [map_one]
+  -- sorry --
 
 end
