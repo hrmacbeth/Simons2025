@@ -258,4 +258,3 @@ example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
   · rw [map_one]
 
 end
-
