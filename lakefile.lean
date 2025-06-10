@@ -3,7 +3,8 @@ open Lake DSL
 
 def moreServerArgs := #[
   "-Dpp.unicode.fun=true", -- pretty-prints `fun a ↦ b`
-  "-Dpp.proofs.withType=false"
+  "-Dpp.proofs.withType=false",
+  "-Dweak.linter.style.multiGoal=false" -- don't complain about missing ·
 ]
 
 -- These settings only apply during `lake build`, but not in VSCode editor.
