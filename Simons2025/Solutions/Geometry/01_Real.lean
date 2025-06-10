@@ -128,7 +128,6 @@ example (a : ℝ) :
   -- sorry --
   intro α
   ext x
-  simp only [Set.mem_singleton_iff] -- FIXME dsimp lemmas
   dsimp [α]
   constructor
   · intro h
@@ -194,11 +193,9 @@ example (a : ℝ) : IsIsometry (halfTurn a) := by
   -- sorry --
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/
-example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) : α 2 ∈ ({3, 7} : Set ℝ) := by
+example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
   -- sorry --
   dsimp [IsIsometry] at *
-  -- FIXME `Set` defaults
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] -- FIXME set defaults
   specialize hα 2 0
   rw [h] at hα
   norm_num at hα
@@ -211,11 +208,9 @@ example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) : α 2 ∈ ({3, 7} 
   -- sorry --
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α x` be? -/
-example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) (x : ℝ) :
-    α x ∈ ({5 - x, 5 + x} : Set ℝ) := by
+example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 - x, 5 + x} := by
   -- sorry --
   dsimp [IsIsometry] at *
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] -- FIXME set defaults
   specialize hα x 0
   rw [h] at hα
   norm_num at hα
@@ -229,10 +224,9 @@ example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) (x : ℝ) :
 
 /-- If `α ∈ M` and `α 0 = a`, prove that for all `x`, `α x = ± x + a`. -/
 theorem aux1 {α : Perm ℝ} (hα : IsIsometry α) {a : ℝ} (h : α 0 = a) (x : ℝ) :
-    α x ∈ ({- x + a, x + a} : Set ℝ) := by
+    α x ∈ {- x + a, x + a} := by
   -- sorry --
   dsimp [IsIsometry] at *
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] -- FIXME set defaults
   specialize hα x 0
   rw [h] at hα
   norm_num at hα
@@ -269,7 +263,7 @@ theorem aux3 {α : Perm ℝ} (hα : IsIsometry α) {a : ℝ} (h : α 0 = a) :
     α = addRight a ∨ α = halfTurn a := by
   -- sorry --
   have H := aux1 hα h
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at H -- FIXME
+  dsimp at H
   by_cases h1 : ∀ x ≠ 0, α x = halfTurn a x
   · right
     ext x
@@ -316,7 +310,6 @@ example :
   -- sorry --
   ext x
   dsimp
-  simp only [Set.mem_singleton_iff] -- FIXME
   constructor
   · intro H
     linear_combination H
@@ -331,7 +324,6 @@ example (a b : ℝ) (ha : a ≠ 0) (ha' : a ≠ 1) :
   -- sorry --
   ext x
   dsimp
-  simp only [Set.mem_singleton_iff] -- FIXME
   have ha'' : a - 1 ≠ 0 := by
     contrapose! ha'
     linear_combination ha'

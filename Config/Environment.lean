@@ -1,7 +1,9 @@
+import Config.Set
 import Lean.Elab.Command
 
 open Lean Elab Command
 
+/-- We will remove the `@[simp]` tag from these lemmas. -/
 def simpLems : Array Name := #[
   `ne_eq,
   -- `simp` lemmas which interact confusingly with `field_simp`

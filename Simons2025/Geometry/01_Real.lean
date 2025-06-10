@@ -105,17 +105,16 @@ example (a : ℝ) : IsIsometry (halfTurn a) := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/
-example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) : α 2 ∈ ({3, 7} : Set ℝ) := by
+example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α x` be? -/
-example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) (x : ℝ) :
-    α x ∈ ({5 - x, 5 + x} : Set ℝ) := by
+example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 - x, 5 + x} := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = a`, prove that for all `x`, `α x = ± x + a`. -/
 theorem aux1 {α : Perm ℝ} (hα : IsIsometry α) {a : ℝ} (h : α 0 = a) (x : ℝ) :
-    α x ∈ ({- x + a, x + a} : Set ℝ) := by
+    α x ∈ {- x + a, x + a} := by
   sorry
 
 /- If, for given `α`, `α x = x + a` and `α y = - y + a`, prove that `|x - y| = |x + y|` and
