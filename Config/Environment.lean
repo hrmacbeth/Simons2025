@@ -1,4 +1,4 @@
-import Config.Set
+import Config.SimpLemmas
 import Lean.Elab.Command
 
 open Lean Elab Command

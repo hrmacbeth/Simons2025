@@ -1,5 +1,5 @@
 /- Copyright (c) Heather Macbeth, 2023.  All rights reserved. -/
-import Mathlib.Data.Set.Basic
+import Mathlib.GroupTheory.GroupAction.Defs
 
 open Set
 
@@ -8,7 +8,7 @@ attribute [default_instance] Set.instEmptyCollection
 
 variable {α : Type*}
 
-/-! ### Some additions to the `dsimp` set
+/-! ### Some additions to the `dsimp`-set for `Set`
 
 Restate some standard set `simp`-lemmas with `=` rather than `↔`, so that they are definitional. -/
 
@@ -21,3 +21,21 @@ Restate some standard set `simp`-lemmas with `=` rather than `↔`, so that they
 
 @[simp] theorem Set.mem_empty_eq_false (x : α) : (x ∈ ∅) = False := rfl
 @[simp] theorem Set.mem_univ_eq (x : α) : (x ∈ univ) = True := rfl
+
+/-! ### Extra simp-lemmas for subgroups -/
+
+section
+open Equiv MulAction
+
+@[simp]
+theorem Subgroup.mem_mk' {G : Type*} [Group G] (P : G → Prop) (a : G) (h1 h2 h3) :
+    (a ∈ Subgroup.mk (Submonoid.mk (Subsemigroup.mk (setOf P) h1) h2) h3) = P a :=
+  rfl
+
+@[simp]
+theorem MulAction.mem_stabilizer_iff' {G : Type*} [Group G] {α : Type*} [MulAction G α] {a : α}
+    {g : G} :
+    (g ∈ stabilizer G a) = (g • a = a) :=
+  rfl
+
+end

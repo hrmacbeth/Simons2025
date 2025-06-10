@@ -147,24 +147,21 @@ abbrev isometrySubgroup : Subgroup (Perm ℝ) where
   mul_mem' := by
     -- sorry --
     intro α β hα hβ
-    unfold IsIsometry at *
-    dsimp at *
+    dsimp [IsIsometry] at *
     intro x y
     rw [hα]
     rw [hβ]
     -- sorry --
   one_mem' := by
     -- sorry --
-    unfold IsIsometry at *
-    dsimp at *
+    dsimp [IsIsometry] at *
     intro x y
     rfl
     -- sorry --
   inv_mem' := by
     -- sorry --
     intro α hα
-    unfold IsIsometry at *
-    dsimp at *
+    dsimp [IsIsometry] at *
     intro x y
     rw [← hα]
     -- rw?
@@ -528,9 +525,8 @@ of R. -/
 example (α : A) : α ∈ stabilizer A (0:ℝ) ↔ ∃ (a : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a 0 ha := by
   -- sorry --
   obtain ⟨α, hα⟩ := α -- FIXME
-  simp only [SetLike.mem_coe, mem_stabilizer_iff] -- FIXME
-  dsimp
-  change IsSimilarity α at hα -- FIXME
+  dsimp at hα ⊢ -- why doesn't `dsimp at *` work?
+  show α • (0:ℝ) = 0 ↔ _ -- FIXME
   constructor
   · apply aux6 at hα
     obtain ⟨a, b, ha, H⟩ := hα

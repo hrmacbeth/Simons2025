@@ -110,9 +110,8 @@ notation "T" => tSubgroup
 /-- If `a ∈ T` and `α 0 = c`, prove that `α z = z + c`. -/
 theorem aux3 {α : Perm ℂ} (hα : α ∈ T) {c : ℂ} (hα0 : α 0 = c) : α = translation c := by
   -- sorry --
-  change ∀ _, _ at hα
   ext z
-  dsimp
+  dsimp at *
   specialize hα z 0
   rw [hα0] at hα
   linear_combination hα
@@ -130,9 +129,9 @@ example (α : Perm ℂ) : α ∈ T ↔ ∃ c, α = translation c := by
   · intro h
     obtain ⟨c, hc⟩ := h
     rw [hc]
-    change ∀ _, _ -- FIXME
+    dsimp
     intro z w
-    rw [← aux2]
+    ring
   -- sorry --
 
 /-! ## Problem 15 -/
@@ -186,24 +185,21 @@ abbrev isometrySubgroup : Subgroup (Perm ℂ) where
   mul_mem' := by
     -- sorry --
     intro α β hα hβ
-    unfold IsIsometry at *
-    dsimp at *
+    dsimp [IsIsometry] at *
     intro x y
     rw [hα]
     rw [hβ]
     -- sorry --
   one_mem' := by
     -- sorry --
-    unfold IsIsometry at *
-    dsimp at *
+    dsimp [IsIsometry] at *
     intro x y
     rfl
     -- sorry --
   inv_mem' := by
     -- sorry --
     intro α hα
-    unfold IsIsometry at *
-    dsimp at *
+    dsimp [IsIsometry] at *
     intro x y
     rw [← hα]
     -- rw?
@@ -217,9 +213,7 @@ notation "E" => isometrySubgroup
 example : T ≤ E := by
   -- sorry --
   intro α hα
-  change ∀ _, _ at hα -- FIXME
-  change IsIsometry _ -- FIXME
-  dsimp [IsIsometry]
+  dsimp [IsIsometry] at *
   intro z w
   rw [hα]
   -- sorry --
