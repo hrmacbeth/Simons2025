@@ -33,8 +33,8 @@ theorem aux1 :
     let α := fun (z : ℂ) ↦ z + 2 * I
     ∀ z w, z - w = α z - α w := by
   -- sorry --
-  intro α z w
-  dsimp [α]
+  dsimp
+  intro z w
   ring
   -- sorry --
 
@@ -44,7 +44,9 @@ example :
     let α := fun (z : ℂ) ↦ z + 2 * I
     IsIsometry α := by
   -- sorry --
-  intro α z w
+  dsimp
+  intro z w
+  dsimp
   rw [aux1 z w]
   -- sorry --
 

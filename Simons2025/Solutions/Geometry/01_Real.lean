@@ -25,14 +25,14 @@ abbrev addRight (a : ℝ) : Perm ℝ where
   invFun := fun x ↦ x - a
   left_inv := by
     -- sorry --
+    dsimp [Function.LeftInverse]
     intro y
-    dsimp
     ring
     -- sorry --
   right_inv := by
     -- sorry --
+    dsimp [Function.RightInverse, Function.LeftInverse]
     intro y
-    dsimp
     ring
     -- sorry --
 
@@ -42,8 +42,8 @@ example (a : ℝ) :
     let α := addRight a
     ∀ x y, x - y = α x - α y := by
   -- sorry --
-  intro α x y
-  dsimp [α]
+  dsimp
+  intro x y
   ring
   -- sorry --
 
@@ -116,8 +116,8 @@ example (a : ℝ) :
     let α := halfTurn a
     ∀ x y, -(x - y) = α x - α y := by
   -- sorry --
-  intro α x y
-  dsimp [α]
+  dsimp
+  intro x y
   ring
   -- sorry --
 
@@ -126,9 +126,9 @@ example (a : ℝ) :
     let α := halfTurn a
     { x | α x = x } = {a / 2} := by
   -- sorry --
-  intro α
+  dsimp
   ext x
-  dsimp [α]
+  dsimp
   constructor
   · intro h
     linear_combination -h/2
@@ -305,6 +305,7 @@ example :
     let α := fun (x:ℝ) ↦ 2 * x - 1
     { x | α x = x } = {1} := by
   -- sorry --
+  dsimp
   ext x
   dsimp
   constructor
@@ -319,6 +320,7 @@ example (a b : ℝ) (ha : a ≠ 0) (ha' : a ≠ 1) :
     let α := fun x ↦ a * x + b
     { x | α x = x } = {- b / (a - 1)} := by
   -- sorry --
+  dsimp
   ext x
   dsimp
   have ha'' : a - 1 ≠ 0 := by
