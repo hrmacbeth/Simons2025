@@ -28,6 +28,10 @@ section
 open Equiv MulAction
 
 @[simp]
+theorem SetLike.le_def' {A : Type*} {B : Type*} [SetLike A B] {S T : A} :
+    (S ≤ T) = ∀ ⦃x : B⦄, x ∈ S → x ∈ T := rfl
+
+@[simp]
 theorem Subgroup.mem_mk' {G : Type*} [Group G] (P : G → Prop) (a : G) (h1 h2 h3) :
     (a ∈ Subgroup.mk (Submonoid.mk (Subsemigroup.mk (setOf P) h1) h2) h3) = P a :=
   rfl

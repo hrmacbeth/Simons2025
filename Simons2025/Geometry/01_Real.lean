@@ -53,7 +53,7 @@ abbrev translationSubgroup : Subgroup (Perm ℝ) where
 notation "T" => translationSubgroup
 
 /-- If `α ∈ T` and `α 0 = 0`, prove that `α x = x + a`. -/
-example {α : Perm ℝ} (hα : IsTranslation α) {a : ℝ} (h : α 0 = a) : α = addRight a := by
+example {α : Perm ℝ} (hα : α ∈ T) {a : ℝ} (h : α 0 = a) : α = addRight a := by
   sorry
 
 /-! ## Problem 2 -/
@@ -97,40 +97,40 @@ abbrev isometrySubgroup : Subgroup (Perm ℝ) where
 notation "M" => isometrySubgroup
 
 /-- Does `M` contain the translation group of `ℝ`? -/
-example {α : Perm ℝ} (hα : IsTranslation α) : IsIsometry α := by
+example : T ≤ M := by
   sorry
 
 /-- Does `M` contain the half-turns of `ℝ`? -/
-example (a : ℝ) : IsIsometry (halfTurn a) := by
+example (a : ℝ) : halfTurn a ∈ M := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/
-example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
+example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α x` be? -/
-example {α : Perm ℝ} (hα : IsIsometry α) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 - x, 5 + x} := by
+example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 - x, 5 + x} := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = a`, prove that for all `x`, `α x = ± x + a`. -/
-theorem aux1 {α : Perm ℝ} (hα : IsIsometry α) {a : ℝ} (h : α 0 = a) (x : ℝ) :
+theorem aux1 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ) :
     α x ∈ {- x + a, x + a} := by
   sorry
 
 /- If, for given `α`, `α x = x + a` and `α y = - y + a`, prove that `|x - y| = |x + y|` and
 deduce that `x` or `y` is zero. -/
-theorem aux2 {α : Perm ℝ} (hα : IsIsometry α) {a x : ℝ} (hx : α x = x + a) {y : ℝ}
+theorem aux2 {α : Perm ℝ} (hα : α ∈ M) {a x : ℝ} (hx : α x = x + a) {y : ℝ}
     (hy : α y = -y + a) :
     x = 0 ∨ y = 0 := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = a`, prove that `α` is either a half-turn or a translation. -/
-theorem aux3 {α : Perm ℝ} (hα : IsIsometry α) {a : ℝ} (h : α 0 = a) :
+theorem aux3 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
     α = addRight a ∨ α = halfTurn a := by
   sorry
 
 /-- If `α ∈ M`, prove that `α` is either a half-turn or a translation. -/
-example {α : Perm ℝ} (hα : IsIsometry α) : ∃ a, α = addRight a ∨ α = halfTurn a := by
+example {α : Perm ℝ} (hα : α ∈ M) : ∃ a, α = addRight a ∨ α = halfTurn a := by
   sorry
 
 /-! ## Problem 3 -/
@@ -174,20 +174,20 @@ abbrev similaritySubgroup : Subgroup (Perm ℝ) where
 notation "A" => similaritySubgroup
 
 /-- Does `A` contain all the translations of `ℝ`? -/
-example {α : Perm ℝ} (hα : IsTranslation α) : IsSimilarity α := by
+example : T ≤ A := by
   sorry
 
 /-- Does `A` contain all the half-turns of `ℝ`? -/
-example {a : ℝ} : IsSimilarity (halfTurn a) := by
+example {a : ℝ} : halfTurn a ∈ A := by
   sorry
 
 /-- If `α ∈ A`, `α 0 = 5` and `α 1 = 7`, find `α y`. -/
-example {α : Perm ℝ} (h : IsSimilarity α) (h0 : α 0 = 5) (h1 : α 1 = 7) (y : ℝ) :
+example {α : Perm ℝ} (h : α ∈ A) (h0 : α 0 = 5) (h1 : α 1 = 7) (y : ℝ) :
     α y = 2 * y + 5 := by
   sorry
 
 /-- If `a ∈ A`, `α O = b` and `α 1 = a + b` with `a ≠ 0`, prove that `α y = a * y + b`. -/
-theorem aux4 {α : Perm ℝ} (h : IsSimilarity α) {a b : ℝ} (ha : a ≠ 0) (h0 : α 0 = b)
+theorem aux4 {α : Perm ℝ} (h : α ∈ A) {a b : ℝ} (ha : a ≠ 0) (h0 : α 0 = b)
     (h1 : α 1 = a + b) (y : ℝ) : α y = a * y + b := by
   sorry
 

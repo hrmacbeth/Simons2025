@@ -214,8 +214,9 @@ notation "E" => isometrySubgroup
 /-- Show that `E` contains the translation group. -/
 example : T ≤ E := by
   -- sorry --
+  dsimp
   intro α hα
-  dsimp [IsIsometry] at *
+  dsimp [IsIsometry]
   intro z w
   rw [hα]
   -- sorry --
