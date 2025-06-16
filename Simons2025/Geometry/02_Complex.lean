@@ -14,25 +14,7 @@ import Config.Environment
 Chapter 3, problems 13-38: Groups of permutations of `ℂ`
 -/
 
-lftcm_init
-noncomputable section
 
-open Equiv
-open Complex (I exp exp_add exp_zero re im)
-open MulAction hiding toSMul
-
-/-! ## Problem 13 -/
-
-/-- Any distance-preserving transformation is called an *isometry*. -/
-def IsIsometry (α : ℂ → ℂ) : Prop :=
-  ∀ z w, ‖α z - α w‖ = ‖z - w‖
-
-/-- Let `α` denote the function `z ↦ z + 2 * I` as a transformation of `ℂ`. For any two points of
-the plane `z` and `w`, compare the values of `z - w` and `α z - w z`. -/
-example :
-    let α := fun (z : ℂ) ↦ z + 2 * I
-    ∀ z w, z - w = α z - α w := by
-  sorry
 
 /-- Let `α` denote the function `z ↦ z + 2 * I` as a transformation of `ℂ`. Show that `α` is an
 isometry. -/
@@ -141,4 +123,3 @@ example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
   sorry
 
 end
-
