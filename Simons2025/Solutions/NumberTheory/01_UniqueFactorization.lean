@@ -18,7 +18,7 @@ example (a b : ℕ) (hb_ne_zero : b ≠ 0) :
   have eq : a = q * b + r := by
     -- sorry --
     conv_lhs => rw [← Nat.div_add_mod a b, mul_comm]
-  -- sorry --
+    -- sorry --
   use q, r, eq
   constructor
   · -- The remainder is less than b
