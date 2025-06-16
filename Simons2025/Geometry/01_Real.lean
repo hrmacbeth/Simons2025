@@ -104,6 +104,9 @@ example : T ≤ M := by
 example (a : ℝ) : halfTurn a ∈ M := by
   sorry
 
+#check abs_eq_abs
+#check eq_or_eq_neg_of_abs_eq
+
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/
 example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
   sorry
@@ -160,6 +163,9 @@ the real line. -/
 def IsSimilarity (α : Perm ℝ) : Prop :=
   ∀ {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z),
     (x - y) / (x - z) = (α x - α y) / (α x - α z)
+
+#check Equiv.injective
+#check Function.Injective.ne
 
 /-- Show that the similarities form a subgroup of `Perm ℝ`. -/
 abbrev similaritySubgroup : Subgroup (Perm ℝ) where
