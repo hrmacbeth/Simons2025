@@ -125,7 +125,7 @@ abbrev reflectReal : Perm ℂ where
     sorry
 
 /-- Let `α` denote complex conjugation. -/
-notation "α" => reflectReal
+local notation "α" => reflectReal
 
 /-- Identify the line of fixed points of complex conjugation. -/
 example : { z | α z = z } = { z : ℂ | z.im = 0 } := by

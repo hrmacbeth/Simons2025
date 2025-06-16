@@ -1,3 +1,4 @@
+import Config.NormNumI
 import Config.SimpLemmas
 import Lean.Elab.Command
 import Mathlib.Data.Complex.Basic

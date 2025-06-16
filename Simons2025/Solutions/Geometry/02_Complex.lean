@@ -242,7 +242,7 @@ abbrev reflectReal : Perm ℂ where
     -- sorry --
 
 /-- Let `α` denote complex conjugation. -/
-notation "α" => reflectReal
+local notation "α" => reflectReal
 
 /-- Identify the line of fixed points of complex conjugation. -/
 example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
@@ -256,7 +256,6 @@ example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
     linear_combination - h / 2 / I
   · intro h
     linear_combination (norm := skip) -2 * I * h
-    have : 2 * I ≠ 0 := sorry -- FIXME `norm_num` extension
     field_simp
     ring
   -- sorry --
@@ -289,8 +288,8 @@ example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
           dsimp
           rw [Complex.norm_conj]
   constructor
-  · rw [map_zero]
-  · rw [map_one]
+  · norm_num
+  · norm_num
   -- sorry --
 
 end
