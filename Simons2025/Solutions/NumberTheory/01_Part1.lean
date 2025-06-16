@@ -4,7 +4,7 @@
 
 import Mathlib
 
-/- #Chapter 1. Unique factorization -/
+/-! # Chapter 1. Unique factorization -/
 
 /-! ## Exercise 1.
 Let a and b be nonzero integers.
