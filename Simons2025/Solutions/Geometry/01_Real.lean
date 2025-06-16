@@ -190,8 +190,11 @@ example (a : ℝ) : halfTurn a ∈ M := by
   dsimp
   calc
     |-x + a - (-y + a)| = |-(x - y)| := by ring_nf
-    _ = |x - y| := by rw [abs_neg]
+    _ = |x - y| := by /- rw? -/ rw [abs_neg]
   -- sorry --
+
+#check abs_eq_abs
+#check eq_or_eq_neg_of_abs_eq
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/
 example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
@@ -200,8 +203,9 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
   dsimp [IsIsometry] at hα
   specialize hα 2 0
   rw [h] at hα
-  norm_num at hα
-  apply eq_or_eq_neg_of_abs_eq at hα
+  -- norm_num at hα -- optional, sends proof down a slightly different path
+  -- rw? at hα has a bug
+  rw [abs_eq_abs] at hα
   obtain hα | hα := hα
   · right
     linear_combination hα
@@ -216,7 +220,7 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 
   dsimp [IsIsometry] at hα
   specialize hα x 0
   rw [h] at hα
-  norm_num at hα
+  -- ring_nf at hα -- optional
   rw [abs_eq_abs] at hα
   obtain hα | hα := hα
   · right
@@ -366,6 +370,9 @@ the real line. -/
 def IsSimilarity (α : Perm ℝ) : Prop :=
   ∀ {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z),
     (x - y) / (x - z) = (α x - α y) / (α x - α z)
+
+#check Equiv.injective
+#check Function.Injective.ne
 
 /-- Show that the similarities form a subgroup of `Perm ℝ`. -/
 abbrev similaritySubgroup : Subgroup (Perm ℝ) where
