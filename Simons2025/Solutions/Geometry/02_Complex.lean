@@ -249,7 +249,7 @@ example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
   -- sorry --
   ext z
   dsimp
-  suffices _ ↔ (z.im : ℂ) = 0 from mod_cast this -- FIXME `cify`?
+  cify
   rw [Complex.im_eq_sub_conj]
   constructor
   · intro h
