@@ -16,16 +16,18 @@ example (a b : ℕ) (hb_ne_zero : b ≠ 0) :
   set q := a / b
   set r := a % b
   have eq : a = q * b + r := by
-  -- sorry --
+    -- sorry --
     conv_lhs => rw [← Nat.div_add_mod a b, mul_comm]
   -- sorry --
   use q, r, eq
   constructor
-  · -- sorry --
+  · -- The remainder is less than b
+    -- sorry --
     apply Nat.mod_lt
     exact Nat.zero_lt_of_ne_zero hb_ne_zero
     -- sorry
-  · -- sorry --
+  · -- Equality of gcd's
+    -- sorry --
     rw [Nat.gcd_comm, eq]
     exact Nat.gcd_mul_right_add_right b r q
     -- sorry --
