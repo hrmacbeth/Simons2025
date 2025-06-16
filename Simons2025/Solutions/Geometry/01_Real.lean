@@ -58,21 +58,21 @@ abbrev translationSubgroup : Subgroup (Perm ℝ) where
   mul_mem' := by
     -- sorry --
     intro α β hα hβ
-    dsimp [IsTranslation] at *
+    dsimp [IsTranslation] at hα hβ ⊢
     intro x y
     rw [hα]
     rw [hβ]
     -- sorry --
   one_mem' := by
     -- sorry --
-    dsimp [IsTranslation] at *
+    dsimp [IsTranslation]
     intro x y
     rfl
     -- sorry --
   inv_mem' := by
     -- sorry --
     intro α hα
-    dsimp [IsTranslation] at *
+    dsimp [IsTranslation] at hα ⊢
     intro x y
     rw [← hα]
     -- rw?
@@ -86,7 +86,8 @@ notation "T" => translationSubgroup
 example {α : Perm ℝ} (hα : α ∈ T) {a : ℝ} (h : α 0 = a) : α = addRight a := by
   -- sorry --
   ext x
-  dsimp [IsTranslation] at *
+  dsimp
+  dsimp [IsTranslation] at hα
   specialize hα x 0
   rw [h] at hα
   linear_combination hα
@@ -147,21 +148,21 @@ abbrev isometrySubgroup : Subgroup (Perm ℝ) where
   mul_mem' := by
     -- sorry --
     intro α β hα hβ
-    dsimp [IsIsometry] at *
+    dsimp [IsIsometry] at hα hβ ⊢
     intro x y
     rw [hα]
     rw [hβ]
     -- sorry --
   one_mem' := by
     -- sorry --
-    dsimp [IsIsometry] at *
+    dsimp [IsIsometry]
     intro x y
     rfl
     -- sorry --
   inv_mem' := by
     -- sorry --
     intro α hα
-    dsimp [IsIsometry] at *
+    dsimp [IsIsometry] at hα ⊢
     intro x y
     rw [← hα]
     -- rw?
@@ -176,7 +177,8 @@ example : T ≤ M := by
   -- sorry --
   dsimp
   intro α hα
-  dsimp [IsIsometry, IsTranslation] at *
+  dsimp [IsIsometry]
+  dsimp [IsTranslation] at hα
   intro x y
   rw [hα]
   -- sorry --
@@ -194,7 +196,8 @@ example (a : ℝ) : halfTurn a ∈ M := by
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/
 example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
   -- sorry --
-  dsimp [IsIsometry] at *
+  dsimp
+  dsimp [IsIsometry] at hα
   specialize hα 2 0
   rw [h] at hα
   norm_num at hα
@@ -209,7 +212,8 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : α 2 ∈ {3, 7} := by
 /-- If `α ∈ M` and `α 0 = 5`, what can `α x` be? -/
 example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 - x, 5 + x} := by
   -- sorry --
-  dsimp [IsIsometry] at *
+  dsimp
+  dsimp [IsIsometry] at hα
   specialize hα x 0
   rw [h] at hα
   norm_num at hα
@@ -225,7 +229,8 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 
 theorem aux1 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ) :
     α x ∈ {- x + a, x + a} := by
   -- sorry --
-  dsimp [IsIsometry] at *
+  dsimp
+  dsimp [IsIsometry] at hα
   specialize hα x 0
   rw [h] at hα
   norm_num at hα
@@ -368,7 +373,7 @@ abbrev similaritySubgroup : Subgroup (Perm ℝ) where
   mul_mem' := by
     -- sorry --
     intro α β hα hβ
-    dsimp [IsSimilarity] at *
+    dsimp [IsSimilarity] at hα hβ ⊢
     intro x y z hxy hxz hyz
     have hxy' : β x ≠ β y := β.injective.ne hxy
     have hxz' : β x ≠ β z := β.injective.ne hxz
@@ -393,7 +398,7 @@ abbrev similaritySubgroup : Subgroup (Perm ℝ) where
   inv_mem' := by
     -- sorry --
     intro α hα
-    dsimp [IsSimilarity] at *
+    dsimp [IsSimilarity] at hα ⊢
     intro x y z hxy hxz hyz
     nth_rewrite 2 [hα]
     rw [@Perm.apply_inv_self]
@@ -414,7 +419,8 @@ example : T ≤ A := by
   -- sorry --
   dsimp
   intro α hα
-  dsimp [IsTranslation, IsSimilarity] at *
+  dsimp [IsTranslation] at hα
+  dsimp [IsSimilarity]
   intro x y z hxy hxz hyz
   rw [hα, hα]
   -- sorry --
@@ -530,9 +536,8 @@ theorem aux6 {α : Perm ℝ} (h : IsSimilarity α) :
 of R. -/
 example (α : A) : α ∈ stabilizer A (0:ℝ) ↔ ∃ (a : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a 0 ha := by
   -- sorry --
-  obtain ⟨α, hα⟩ := α -- FIXME
-  dsimp at hα ⊢ -- why doesn't `dsimp at *` work?
-  show α • (0:ℝ) = 0 ↔ _ -- FIXME
+  obtain ⟨α, hα⟩ := α
+  dsimp at hα ⊢
   constructor
   · apply aux6 at hα
     obtain ⟨a, b, ha, H⟩ := hα

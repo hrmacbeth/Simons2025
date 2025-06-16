@@ -1,5 +1,6 @@
 /- Copyright (c) Heather Macbeth, 2023.  All rights reserved. -/
 import Mathlib.GroupTheory.GroupAction.Defs
+import Mathlib.Algebra.Group.Subgroup.Actions
 
 open Set
 
@@ -36,10 +37,12 @@ theorem Subgroup.mem_mk' {G : Type*} [Group G] (P : G → Prop) (a : G) (h1 h2 h
     (a ∈ Subgroup.mk (Submonoid.mk (Subsemigroup.mk (setOf P) h1) h2) h3) = P a :=
   rfl
 
-@[simp]
+@[simp↓]
 theorem MulAction.mem_stabilizer_iff' {G : Type*} [Group G] {α : Type*} [MulAction G α] {a : α}
     {g : G} :
     (g ∈ stabilizer G a) = (g • a = a) :=
   rfl
+
+attribute [simp↓] Subgroup.mk_smul
 
 end
