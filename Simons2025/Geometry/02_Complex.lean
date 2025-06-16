@@ -17,7 +17,7 @@ Chapter 3, problems 13-38: Groups of permutations of `ℂ`
 lftcm_init
 noncomputable section
 
-open Equiv ComplexConjugate
+open Equiv
 open Complex (I exp exp_add exp_zero re im)
 open MulAction hiding toSMul
 
@@ -116,7 +116,7 @@ section
 
 /-- Complex conjugation is an isometry. -/
 abbrev reflectReal : Perm ℂ where
-  toFun := conj -- FIXME display
+  toFun := conj
   invFun := conj
   left_inv := by
     sorry

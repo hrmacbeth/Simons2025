@@ -17,7 +17,7 @@ Chapter 3, problems 13-38: Groups of permutations of `ℂ`
 lftcm_init
 noncomputable section
 
-open Equiv ComplexConjugate
+open Equiv
 open Complex (I exp exp_add exp_zero re im)
 open MulAction hiding toSMul
 
@@ -226,7 +226,7 @@ section
 
 /-- Complex conjugation is an isometry. -/
 abbrev reflectReal : Perm ℂ where
-  toFun := conj -- FIXME display
+  toFun := conj
   invFun := conj
   left_inv := by
     -- sorry --
@@ -247,18 +247,14 @@ example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
   -- sorry --
   ext z
   dsimp
+  suffices _ ↔ (z.im : ℂ) = 0 from mod_cast this -- FIXME `cify`?
+  rw [Complex.im_eq_sub_conj]
   constructor
   · intro h
-    -- `cify`
-    suffices (z.im : ℂ) = 0 from mod_cast this
-    rw [Complex.im_eq_sub_conj]
     linear_combination - h / 2 / I
   · intro h
-    -- `cify` at `h`
-    have h : (z.im : ℂ) = 0 := mod_cast h
-    rw [Complex.im_eq_sub_conj] at h
     linear_combination (norm := skip) -2 * I * h
-    have : 2 * I ≠ 0 := sorry
+    have : 2 * I ≠ 0 := sorry -- FIXME `norm_num` extension
     field_simp
     ring
   -- sorry --

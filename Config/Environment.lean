@@ -1,5 +1,6 @@
 import Config.SimpLemmas
 import Lean.Elab.Command
+import Mathlib.Data.Complex.Basic
 
 open Lean Elab Command
 
@@ -23,3 +24,5 @@ elab "lftcm_init" : command => liftCoreM do
       -- This consumes all types of errors, rather than just existence ones,
       -- but there does not appear to be a better general way to achieve this
       pure ()
+
+notation "conj" => starRingEnd ℂ
