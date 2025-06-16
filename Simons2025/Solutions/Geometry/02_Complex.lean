@@ -29,7 +29,7 @@ def IsIsometry (α : ℂ → ℂ) : Prop :=
 
 /-- Let `α` denote the function `z ↦ z + 2 * I` as a transformation of `ℂ`. For any two points of
 the plane `z` and `w`, compare the values of `z - w` and `α z - w z`. -/
-theorem aux1 :
+example :
     let α := fun (z : ℂ) ↦ z + 2 * I
     ∀ z w, z - w = α z - α w := by
   -- sorry --
@@ -47,7 +47,7 @@ example :
   dsimp
   intro z w
   dsimp
-  rw [aux1 z w]
+  ring_nf
   -- sorry --
 
 /-! ## Problem 14 -/
@@ -71,7 +71,7 @@ abbrev translation (c : ℂ) : Perm ℂ where
 /-- If, for some given complex number `c`, `α` is the element `z ↦ z + c` of `Perm ℂ`, prove that,
 for any two complex numbers `z` and `w`, `z - w = α z - α w`. Such an element of `Perm ℂ` is called
 a *translation* of `ℂ`. -/
-theorem aux2 (c : ℂ) :
+example (c : ℂ) :
     let α := translation c
     ∀ z w, z - w = α z - α w := by
   -- sorry --
@@ -110,7 +110,8 @@ abbrev tSubgroup : Subgroup (Perm ℂ) where
 notation "T" => tSubgroup
 
 /-- If `a ∈ T` and `α 0 = c`, prove that `α z = z + c`. -/
-theorem aux3 {α : Perm ℂ} (hα : α ∈ T) {c : ℂ} (hα0 : α 0 = c) : α = translation c := by
+theorem eq_translation_of_mem_tSubgroup {α : Perm ℂ} (hα : α ∈ T) {c : ℂ} (hα0 : α 0 = c) :
+    α = translation c := by
   -- sorry --
   ext z
   dsimp at *
@@ -124,7 +125,7 @@ example (α : Perm ℂ) : α ∈ T ↔ ∃ c, α = translation c := by
   -- sorry --
   constructor
   · intro h
-    apply aux3 at h
+    apply eq_translation_of_mem_tSubgroup at h
     use α 0
     specialize @h (α 0) rfl
     exact h

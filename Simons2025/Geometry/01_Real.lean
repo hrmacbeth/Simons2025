@@ -113,19 +113,19 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 
   sorry
 
 /-- If `α ∈ M` and `α 0 = a`, prove that for all `x`, `α x = ± x + a`. -/
-theorem aux1 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ) :
+theorem IsIsometry.eval_of_eval_zero {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ) :
     α x ∈ {- x + a, x + a} := by
   sorry
 
 /- If, for given `α`, `α x = x + a` and `α y = - y + a`, prove that `|x - y| = |x + y|` and
 deduce that `x` or `y` is zero. -/
-theorem aux2 {α : Perm ℝ} (hα : α ∈ M) {a x : ℝ} (hx : α x = x + a) {y : ℝ}
+theorem IsIsometry.aux {α : Perm ℝ} (hα : α ∈ M) {a x : ℝ} (hx : α x = x + a) {y : ℝ}
     (hy : α y = -y + a) :
     x = 0 ∨ y = 0 := by
   sorry
 
 /-- If `α ∈ M` and `α 0 = a`, prove that `α` is either a half-turn or a translation. -/
-theorem aux3 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
+theorem IsIsometry.eq_addRight_or_eq_halfTurn {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
     α = addRight a ∨ α = halfTurn a := by
   sorry
 
@@ -150,7 +150,7 @@ example (a b : ℝ) (ha : a ≠ 0) (ha' : a ≠ 1) :
 /-- If `α` is the element `x ↦ a * x + b` of `Perm ℝ` and `a ≠ 0`, compare the ratio
 `(x - y) / (x - z)` with the ratio `(α x - α y) / (α x - α z)` for any three distinct real numbers
 `x`, `y` and `z`. -/
-theorem aux4' (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z) :
+example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z) :
     let α := fun x ↦ a * x + b
     (x - y) / (x - z) = (α x - α y) / (α x - α z) := by
   sorry
@@ -187,13 +187,13 @@ example {α : Perm ℝ} (h : α ∈ A) (h0 : α 0 = 5) (h1 : α 1 = 7) (y : ℝ)
   sorry
 
 /-- If `a ∈ A`, `α O = b` and `α 1 = a + b` with `a ≠ 0`, prove that `α y = a * y + b`. -/
-theorem aux4 {α : Perm ℝ} (h : α ∈ A) {a b : ℝ} (ha : a ≠ 0) (h0 : α 0 = b)
-    (h1 : α 1 = a + b) (y : ℝ) : α y = a * y + b := by
+theorem IsSimilarity.eq_mul_left_add_right {α : Perm ℝ} (h : α ∈ A) {a b : ℝ} (ha : a ≠ 0)
+    (h0 : α 0 = b) (h1 : α 1 = a + b) (y : ℝ) : α y = a * y + b := by
   sorry
 
 /-- Prove that all similarities of the real line take the form `x ↦ a * x + b` for some `a`, `b`
 with `a ≠ 0`. -/
-theorem aux5 {α : Perm ℝ} (h : IsSimilarity α) :
+theorem IsSimilarity.exists_eq_mul_left_add_right {α : Perm ℝ} (h : IsSimilarity α) :
     ∃ (a b : ℝ) (ha : a ≠ 0), α = fun x ↦ a * x + b := by
   sorry
 
@@ -209,7 +209,7 @@ abbrev mulLeftaddRight (a b : ℝ) (ha : a ≠ 0) : Perm ℝ where
   right_inv := by
     sorry
 
-theorem aux6 {α : Perm ℝ} (h : IsSimilarity α) :
+theorem IsSimilarity.exists_eq_mulLeftAddRight {α : Perm ℝ} (h : IsSimilarity α) :
     ∃ (a b : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a b ha := by
   sorry
 

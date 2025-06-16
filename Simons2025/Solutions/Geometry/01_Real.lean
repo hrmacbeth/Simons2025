@@ -226,7 +226,7 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ {5 
   -- sorry --
 
 /-- If `α ∈ M` and `α 0 = a`, prove that for all `x`, `α x = ± x + a`. -/
-theorem aux1 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ) :
+theorem IsIsometry.eval_of_eval_zero {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ) :
     α x ∈ {- x + a, x + a} := by
   -- sorry --
   dsimp
@@ -244,7 +244,7 @@ theorem aux1 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) (x : ℝ)
 
 /- If, for given `α`, `α x = x + a` and `α y = - y + a`, prove that `|x - y| = |x + y|` and
 deduce that `x` or `y` is zero. -/
-theorem aux2 {α : Perm ℝ} (hα : α ∈ M) {a x : ℝ} (hx : α x = x + a) {y : ℝ}
+theorem IsIsometry.aux {α : Perm ℝ} (hα : α ∈ M) {a x : ℝ} (hx : α x = x + a) {y : ℝ}
     (hy : α y = -y + a) :
     x = 0 ∨ y = 0 := by
   -- sorry --
@@ -263,10 +263,10 @@ theorem aux2 {α : Perm ℝ} (hα : α ∈ M) {a x : ℝ} (hx : α x = x + a) {y
   -- sorry --
 
 /-- If `α ∈ M` and `α 0 = a`, prove that `α` is either a half-turn or a translation. -/
-theorem aux3 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
+theorem IsIsometry.eq_addRight_or_eq_halfTurn {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
     α = addRight a ∨ α = halfTurn a := by
   -- sorry --
-  have H := aux1 hα h
+  have H := IsIsometry.eval_of_eval_zero hα h
   dsimp at H
   by_cases h1 : ∀ x ≠ 0, α x = halfTurn a x
   · right
@@ -282,7 +282,7 @@ theorem aux3 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
   have hx : α x = x + a := by
     specialize H x
     tauto
-  apply aux2 hα at hx
+  apply IsIsometry.aux hα at hx
   left
   ext y
   specialize H y
@@ -301,7 +301,7 @@ theorem aux3 {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
 example {α : Perm ℝ} (hα : α ∈ M) : ∃ a, α = addRight a ∨ α = halfTurn a := by
   -- sorry --
   use α 0
-  apply aux3 hα
+  apply IsIsometry.eq_addRight_or_eq_halfTurn hα
   rfl
   -- sorry --
 
@@ -344,7 +344,7 @@ example (a b : ℝ) (ha : a ≠ 0) (ha' : a ≠ 1) :
 /-- If `α` is the element `x ↦ a * x + b` of `Perm ℝ` and `a ≠ 0`, compare the ratio
 `(x - y) / (x - z)` with the ratio `(α x - α y) / (α x - α z)` for any three distinct real numbers
 `x`, `y` and `z`. -/
-theorem aux4' (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z) :
+example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z) :
     let α := fun x ↦ a * x + b
     (x - y) / (x - z) = (α x - α y) / (α x - α z) := by
   -- sorry --
@@ -459,8 +459,8 @@ example {α : Perm ℝ} (h : α ∈ A) (h0 : α 0 = 5) (h1 : α 1 = 7) (y : ℝ)
   -- sorry --
 
 /-- If `a ∈ A`, `α O = b` and `α 1 = a + b` with `a ≠ 0`, prove that `α y = a * y + b`. -/
-theorem aux4 {α : Perm ℝ} (h : α ∈ A) {a b : ℝ} (ha : a ≠ 0) (h0 : α 0 = b)
-    (h1 : α 1 = a + b) (y : ℝ) : α y = a * y + b := by
+theorem IsSimilarity.eq_mul_left_add_right {α : Perm ℝ} (h : α ∈ A) {a b : ℝ} (ha : a ≠ 0)
+    (h0 : α 0 = b) (h1 : α 1 = a + b) (y : ℝ) : α y = a * y + b := by
   -- sorry --
   dsimp [IsSimilarity] at h
   specialize @h 0 y 1
@@ -482,7 +482,7 @@ theorem aux4 {α : Perm ℝ} (h : α ∈ A) {a b : ℝ} (ha : a ≠ 0) (h0 : α 
 
 /-- Prove that all similarities of the real line take the form `x ↦ a * x + b` for some `a`, `b`
 with `a ≠ 0`. -/
-theorem aux5 {α : Perm ℝ} (h : IsSimilarity α) :
+theorem IsSimilarity.exists_eq_mul_left_add_right {α : Perm ℝ} (h : IsSimilarity α) :
     ∃ (a b : ℝ) (ha : a ≠ 0), α = fun x ↦ a * x + b := by
   -- sorry --
   have H : α 1 - α 0 ≠ 0 := by
@@ -493,7 +493,7 @@ theorem aux5 {α : Perm ℝ} (h : IsSimilarity α) :
   use α 1 - α 0, α 0, H
   ext x
   dsimp
-  apply aux4 h H
+  apply IsSimilarity.eq_mul_left_add_right h H
   · rfl
   · ring
   -- sorry --
@@ -520,10 +520,10 @@ abbrev mulLeftaddRight (a b : ℝ) (ha : a ≠ 0) : Perm ℝ where
     ring
     -- sorry --
 
-theorem aux6 {α : Perm ℝ} (h : IsSimilarity α) :
+theorem IsSimilarity.exists_eq_mulLeftAddRight {α : Perm ℝ} (h : IsSimilarity α) :
     ∃ (a b : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a b ha := by
   -- sorry --
-  obtain ⟨a, b, ha, H⟩ := aux5 h
+  obtain ⟨a, b, ha, H⟩ := IsSimilarity.exists_eq_mul_left_add_right h
   use a, b, ha
   ext x
   rw [H]
@@ -539,7 +539,7 @@ example (α : A) : α ∈ stabilizer A (0:ℝ) ↔ ∃ (a : ℝ) (ha : a ≠ 0),
   obtain ⟨α, hα⟩ := α
   dsimp at hα ⊢
   constructor
-  · apply aux6 at hα
+  · apply IsSimilarity.exists_eq_mulLeftAddRight at hα
     obtain ⟨a, b, ha, H⟩ := hα
     rw [H]
     dsimp
