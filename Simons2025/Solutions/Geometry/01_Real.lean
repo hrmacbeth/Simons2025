@@ -188,9 +188,9 @@ example (a : ℝ) : halfTurn a ∈ M := by
   -- sorry --
   intro x y
   dsimp
-  trans |-(x - y)|
-  · ring_nf
-  · rw [abs_neg]
+  calc
+    |-x + a - (-y + a)| = |-(x - y)| := by ring_nf
+    _ = |x - y| := by rw [abs_neg]
   -- sorry --
 
 /-- If `α ∈ M` and `α 0 = 5`, what can `α 2` be? -/

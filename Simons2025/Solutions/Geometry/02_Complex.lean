@@ -147,25 +147,25 @@ abbrev rotation (θ : ℝ) : Perm ℂ where
     -- sorry --
     intro z
     dsimp
-    trans (exp (-I * θ) * exp (I * θ)) * z
-    · ring
-    rw [← exp_add]
-    trans exp 0 * z
-    · ring_nf
-    rw [exp_zero]
-    ring
+    calc
+      exp (-I * θ) * (exp (I * θ) * z) = (exp (-I * θ) * exp (I * θ)) * z := by ring
+      _ = exp (-I * θ + I * θ) * z := by rw [exp_add]
+      _ = exp 0 * z := by ring_nf
+      _ = z := by
+          rw [exp_zero]
+          ring
     -- sorry --
   right_inv := by
     -- sorry --
     intro z
     dsimp
-    trans (exp (I * θ) * exp (-I * θ)) * z
-    · ring
-    rw [← exp_add]
-    trans exp 0 * z
-    · ring_nf
-    rw [exp_zero]
-    ring
+    calc
+      exp (I * θ) * (exp (-I * θ) * z) = (exp (-I * θ) * exp (I * θ)) * z := by ring
+      _ = exp (-I * θ + I * θ) * z := by rw [exp_add]
+      _ = exp 0 * z := by ring_nf
+      _ = z := by
+          rw [exp_zero]
+          ring
     -- sorry --
 
 /-- rotations about `0` are isometries of the plane. -/
@@ -173,11 +173,12 @@ example (θ : ℝ) : IsIsometry (rotation θ) := by
   -- sorry --
   intro z w
   dsimp
-  trans ‖exp (θ * I) * (z - w)‖
-  · ring_nf
-  · rw [norm_mul]
-    rw [Complex.norm_exp_ofReal_mul_I] -- FIXME need a comm version?
-    ring
+  calc
+    ‖exp (I * θ) * z - exp (I * θ) * w‖ = ‖exp (θ * I) * (z - w)‖ := by ring_nf
+    _ = ‖z - w‖ := by
+        rw [norm_mul]
+        rw [Complex.norm_exp_ofReal_mul_I]
+        ring
   -- sorry --
 
 /-! ## Problem 16 -/
@@ -265,11 +266,13 @@ image under `α`. -/
 example (p w : ℂ) (hw : w ∈ { z | α z = z }) : ‖p - w‖ = ‖α p - w‖ := by
   -- sorry --
   dsimp at hw
-  trans ‖α (p - w)‖
-  · dsimp
-    rw [Complex.norm_conj]
-  · dsimp
-    rw [map_sub, hw]
+  calc
+    ‖p - w‖ = ‖α (p - w)‖ := by
+        dsimp
+        rw [Complex.norm_conj]
+    _ = ‖α p - w‖ := by
+        dsimp
+        rw [map_sub, hw]
   -- sorry --
 
 /-- `α` is an isometry fixing the points 0 and 1. -/
@@ -278,11 +281,13 @@ example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
   dsimp [IsIsometry]
   constructor
   · intro z w
-    trans ‖α (z - w)‖
-    · dsimp
-      rw [map_sub]
-    · dsimp
-      rw [Complex.norm_conj]
+    calc
+      ‖conj z - conj w‖ = ‖α (z - w)‖ := by
+          dsimp
+          rw [map_sub]
+      _ = ‖z - w‖ := by
+          dsimp
+          rw [Complex.norm_conj]
   constructor
   · rw [map_zero]
   · rw [map_one]
