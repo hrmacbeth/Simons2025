@@ -1,12 +1,20 @@
-/- A formalization of diophantine equations,
+/- Solving diophantine equations in Lean
+   NYC 2025 Workshop on Lean
    (c) Antoine Chambert-Loir, 2025 -/
 
 import Mathlib
 
-/-! This sheet contains four diophantine equations.
-    The first one is Exercise 12 of the book by Ireland and Rosen. -/
+/-! # Diophantine Equations
 
-/-! ## Exercise 12
+  This sheet contains the study four diophantine equations.  -/
+
+/-!
+
+  ## A diophantine equation from geometry
+
+  This exercise is taken from the first chapter of the book by Ireland and Rosen.
+
+  **Problem 12.**
   Suppose that we take several copies of a regular polygon and try
   to fit them evenly about a common vertex.  Prove that the only
   possibilities are six equilateral triangles, four squares, and
@@ -121,7 +129,13 @@ theorem fermat {x y z : ℕ} (H : x ^ 3 + 2 * y ^ 3 = 4 * z ^ 3) :
     simp [hu, hv, hw, this.1, this.2.1, this.2.2]
     -- sorry --
 
-/-! Another diophantine equation -/
+/-! Another diophantine equation from a Putnam competition :
+
+    Prove that the solutions in natural numbers of the equation
+       2 ^ m = 1 + m * n
+    are just m = 0 (and any n) or m = 1 and n = 1.
+
+    -/
 
 -- theorem minFac_le_of_dvd (m n p : ℕ) (hp : p.Prime)
 
@@ -148,15 +162,29 @@ theorem putnam (m n : ℕ) :
     | m + 2 => -- no integer m at least 2 gives a solution,
       -- so we argue by *ex falso*:
       exfalso
+      -- for ease of reading, we write `M` for `m + 2`
       set M := m + 2 with hM
+      -- `Nat.minFac` returns the smallest prime divisor
+      -- … or `0` when there is none.
       let p := Nat.minFac M
       have hp : Fact (p.Prime) := ⟨Nat.minFac_prime (by linarith)⟩
-      have pdvd : p ∣ M := Nat.minFac_dvd M
+      have pdvd : p ∣ m + 2 := Nat.minFac_dvd M
+      -- `orderOf` returns the order of an element in a monoid
+      -- … or `0` when the element is not of finite order
       let r := orderOf (2 : ZMod p)
-      -- have hr_ne_zero : r ≠ 0 := sorry
-      have hr_dvd_p_minus_one : r ∣ p - 1 := by
+      have hr_dvd_M : r ∣ M := by
+        rw [orderOf_dvd_iff_pow_eq_one]
         -- sorry --
+        rw [← Nat.cast_two, ← Nat.cast_pow, H]
+        simp only [Nat.cast_add, Nat.cast_one, add_eq_left]
+        simp only [Nat.cast_mul]
+        convert zero_mul _
+        rw [ZMod.natCast_zmod_eq_zero_iff_dvd]
+        exact Nat.minFac_dvd M
+        -- sorry --
+      have hr : r ∣ p - 1 := by
         apply ZMod.orderOf_dvd_card_sub_one
+        -- sorry --
         rw [← Nat.cast_two, ne_eq, ZMod.natCast_zmod_eq_zero_iff_dvd,
           Nat.prime_two.dvd_iff_eq hp.out.ne_one, eq_comm]
         have : Even (2 ^ M) := by
@@ -168,52 +196,28 @@ theorem putnam (m n : ℕ) :
         apply this.1
         rwa [h2, ← even_iff_two_dvd] at pdvd
         -- sorry --
-      have hr_lt_p : r < p := by
+      -- r is nonzero
+      have hr_ne_zero : r ≠ 0 := fun hr0 ↦ by
+        simp [hM, hr0] at hr_dvd_M
+      -- r is not equal to 1
+      have hr_ne_one : r ≠ 1 := by
         -- sorry --
-        apply lt_of_le_of_lt _
-          (Nat.sub_one_lt hp.out.ne_zero)
-        apply Nat.le_of_dvd _ hr_dvd_p_minus_one
-        exact Nat.sub_pos_of_lt hp.out.two_le
-        -- sorry --
-      have hrm : r ∣ M := by
-        -- sorry --
-        rw [orderOf_dvd_iff_pow_eq_one]
-        rw [← Nat.cast_two, ← Nat.cast_pow, H]
-        simp only [Nat.cast_add, Nat.cast_one, add_eq_left]
-        simp only [Nat.cast_mul]
-        convert zero_mul _
-        rw [ZMod.natCast_zmod_eq_zero_iff_dvd]
-        exact Nat.minFac_dvd M
-        -- sorry --
-      let s := Nat.minFac r
-      -- the smallest prime factor of `r` will give the contradiction
-      have hs : s ∣ r := Nat.minFac_dvd r
-      have hs_prime : s.Prime := by
-        -- sorry --
-        refine Nat.minFac_prime ?_
         rw [ne_eq, orderOf_eq_one_iff, ← sub_eq_zero]
-        rw [← Int.cast_two, ← Int.cast_one, ← Int.cast_sub]
-        simp
+        ring_nf
+        exact one_ne_zero
         -- sorry --
-      -- s is a prime dividing m + 2, but p is the smallest one,
-      -- hence p ≤ s
-      have p_le_s : p ≤ s := by
-        apply (Nat.le_minFac (n := m + 2) (m := p)).mp ?_ _ hs_prime
-        -- sorry --
-        · exact dvd_trans hs hrm
-        -- sorry --
-        -- sorry --
-        · right ; rfl
-        -- sorry --
+      have hr_lt_p : r < p := by
+        apply lt_of_le_of_lt (b := p - 1)
+        · apply Nat.le_of_dvd
+          refine Nat.sub_pos_of_lt hp.out.two_le
+          exact hr
+        · apply Nat.sub_one_lt
+          exact hp.out.ne_zero
       rw [← not_le] at hr_lt_p
       apply hr_lt_p
-      apply le_trans p_le_s
-      apply Nat.le_of_dvd ?_ hs
-      by_contra hr0
-      -- finish the proof
-      -- sorry --
-      simp only [not_lt, nonpos_iff_eq_zero] at hr0
-      simp [hM, hr0] at hrm
-      -- sorry --
-
-
+      -- Now for the contradiction, using that `p` is the
+      -- smallest prime factor of `M`.
+      apply (Nat.le_minFac' (n := M) (m := p)).mp ?_ _ _ hr_dvd_M
+      · simp [p]
+      · rw [Nat.two_le_iff]
+        exact ⟨hr_ne_zero, hr_ne_one⟩
