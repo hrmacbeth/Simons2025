@@ -11,7 +11,7 @@ import Config.Environment
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn
 
-Chapter 3, problems 13-38: Groups of permutations of `ℂ`
+Chapter 3, problems 13-17: Groups of permutations of `ℂ`, part 1
 -/
 
 lftcm_init
@@ -249,7 +249,7 @@ example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
   -- sorry --
   ext z
   dsimp
-  suffices _ ↔ (z.im : ℂ) = 0 from mod_cast this -- FIXME `cify`?
+  cify
   rw [Complex.im_eq_sub_conj]
   constructor
   · intro h

@@ -11,7 +11,7 @@ import Config.Environment
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn
 
-Chapter 3, problems 13-38: Groups of permutations of `ℂ`
+Chapter 3, problems 13-17: Groups of permutations of `ℂ`, part 1
 -/
 
 lftcm_init
