@@ -19,7 +19,6 @@ noncomputable section
 
 open Equiv
 open Complex (I exp exp_add exp_zero re im)
-open MulAction hiding toSMul
 
 /-! ## Problem 13 -/
 
@@ -169,7 +168,7 @@ abbrev rotation (θ : ℝ) : Perm ℂ where
     -- sorry --
 
 /-- rotations about `0` are isometries of the plane. -/
-example (θ : ℝ) : IsIsometry (rotation θ) := by
+theorem isIsometry_rotation (θ : ℝ) : IsIsometry (rotation θ) := by
   -- sorry --
   intro z w
   dsimp
@@ -274,19 +273,23 @@ example (p w : ℂ) (hw : w ∈ { z | α z = z }) : ‖p - w‖ = ‖α p - w‖
         rw [map_sub, hw]
   -- sorry --
 
-/-- `α` is an isometry fixing the points 0 and 1. -/
-example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
+/-- `α` is an isometry. -/
+theorem isIsometry_reflectReal : IsIsometry α := by
   -- sorry --
   dsimp [IsIsometry]
-  constructor
-  · intro z w
-    calc
-      ‖conj z - conj w‖ = ‖α (z - w)‖ := by
-          dsimp
-          rw [map_sub]
-      _ = ‖z - w‖ := by
-          dsimp
-          rw [Complex.norm_conj]
+  intro z w
+  calc
+    ‖conj z - conj w‖ = ‖α (z - w)‖ := by
+        dsimp
+        rw [map_sub]
+    _ = ‖z - w‖ := by
+        dsimp
+        rw [Complex.norm_conj]
+  -- sorry --
+
+/-- `α` fixes the points 0 and 1. -/
+example : α 0 = 0 ∧ α 1 = 1 := by
+  -- sorry --
   constructor
   · norm_num
   · norm_num
