@@ -93,8 +93,8 @@ example (θ r φ : ℝ) :
     α (r * exp (I * φ)) = r * exp (I * (θ - φ)) := by
   sorry
 
-/- Describe a point and its image under `α` in relation to the line of fixed points of the isometry
-`α` defined to be  `z ↦ exp (I * θ) * conj z`. -/
+/- Describe a point and its image under the isometry `α` (defined to be `z ↦ exp (I * θ) * conj z`)
+in relation to the line of fixed points of `α`. -/
 example (θ : ℝ) (z : ℂ) :
     let α := rotation θ * reflectReal
     ∀ r : ℝ, ‖α z - r * exp (I * θ / 2)‖ = ‖z - r * exp (I * θ / 2)‖ := by
