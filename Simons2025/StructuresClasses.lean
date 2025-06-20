@@ -119,7 +119,7 @@ def NatMonoid₁ : Monoid₁ ℕ where
 example : NatMonoid = NatMonoid₁ := sorry
 
 whatsnew in
-structure SpaceWithMetric (X : Type) where
+structure SpaceWithMetric (X : Type*) where
   d : X → X → ℝ
   dist_eq_zero (x : X) : d x x = 0
   dist_pos (x y : X) : x ≠ y → 0 < d x y
@@ -187,7 +187,7 @@ def NatMetric : SpaceWithMetric ℕ where
           rw [abs_sub_comm (m : ℝ) _]
           apply abs_sub_le
 
-structure MagmaHom (X Y : Type) (hX : Magma X) (hY : Magma Y) where
+structure MagmaHom (X Y : Type*) (hX : Magma X) (hY : Magma Y) where
   toFun : X → Y
   addFun (x y : X) : toFun (sum hX x y) = sum hY (toFun x) (toFun y)
 
@@ -200,7 +200,7 @@ def coeMagmaHom : MagmaHom ℕ ℝ (NatMagma) (RealMagma) where
   toFun := (↑)
   addFun a b := Nat.cast_add a b
 
-def metricToTopology (X : Type) (hX : SpaceWithMetric X) : (TopologicalSpace X) where
+def metricToTopology (X : Type*) (hX : SpaceWithMetric X) : (TopologicalSpace X) where
   IsOpen := by
     intro S
     exact ∀ x ∈ S, ∃ ρ : ℝ, 0 < ρ ∧ {y | hX.d x y < ρ} ⊆ S
@@ -293,7 +293,7 @@ instance : Magma ℕ := ⟨fun n m ↦ n + m⟩
 
 #eval (3 † 2) † 𝟘
 
-class SpaceWithMetric (X : Type) where
+class SpaceWithMetric (X : Type*) where
   d : X → X → ℝ
   dist_eq_zero (x : X) : d x x = 0
   dist_pos (x y : X) : x ≠ y → 0 < d x y
@@ -302,7 +302,7 @@ class SpaceWithMetric (X : Type) where
 
 export SpaceWithMetric (d)
 
-instance (X : Type) [SpaceWithMetric X] : TopologicalSpace X := by
+instance TopOnMetric (X : Type*) [SpaceWithMetric X] : TopologicalSpace X := by
   have hX : Structures.SpaceWithMetric X := by
     fconstructor
     · exact d
@@ -312,33 +312,82 @@ instance (X : Type) [SpaceWithMetric X] : TopologicalSpace X := by
     · exact SpaceWithMetric.triangle
   exact (Structures.metricToTopology X hX)
 
-instance (X Y : Type) [SpaceWithMetric X] [SpaceWithMetric Y] : SpaceWithMetric (X × Y) where
-  d := by
-    rintro ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
-    exact max (d p₁ q₁) (d p₂ q₂)
-  dist_eq_zero := sorry
-  dist_pos := sorry
-  symm := sorry
-  triangle := sorry
-
-example (X Y : Type) [SpaceWithMetric X] [SpaceWithMetric Y] : TopologicalSpace (X × Y) :=
-  inferInstance
-
 example : Continuous (fun (x : ℝ) ↦ x + 1) := continuous_add_right ..
 
 example : Continuous (fun (⟨x, y⟩ : ℝ × ℝ) ↦ x + y) := continuous_add
 
-example : Continuous (fun n : ℕ × ℕ ↦ (⟨(n.1 : ℝ), (n.2 : ℝ)⟩ : (ℝ × ℝ))) := by
-  exact continuous_of_discreteTopology
+example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
+  simp_all only [continuous_prodMk]
+  apply And.intro
+  · apply continuous_snd
+  · apply continuous_fst
+
+instance MetricOnProd (X Y : Type*) [SpaceWithMetric X] [SpaceWithMetric Y] :
+    SpaceWithMetric (X × Y) where
+  d := by
+    rintro ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
+    exact max (d p₁ q₁) (d p₂ q₂)
+  dist_eq_zero := by simp [SpaceWithMetric.dist_eq_zero]
+  dist_pos := by
+    rintro ⟨p₁, p₂⟩ ⟨q₁, q₂⟩ H
+    simp
+    simp at H
+    by_cases h : p₁ = q₁
+    · right
+      apply SpaceWithMetric.dist_pos
+      exact H h
+    · left
+      apply SpaceWithMetric.dist_pos
+      exact h
+  symm := by simp [SpaceWithMetric.symm]
+  triangle := by
+    intro p q r
+    simp-- [SpaceWithMetric.triangle]
+    constructor
+    · calc
+        d p.1 r.1 ≤ (d p.1 q.1) + (d q.1 r.1) := by apply SpaceWithMetric.triangle
+        _ ≤ max (d p.1 q.1) (d p.2 q.2) + (d q.1 r.1) := by
+          gcongr
+          apply le_max_left
+        _ ≤ max (d p.1 q.1) (d p.2 q.2) + max (d q.1 r.1) (d q.2 r.2) := by
+          gcongr
+          apply le_max_left
+    · calc
+        d p.2 r.2 ≤ (d p.2 q.2) + (d q.2 r.2) := by apply SpaceWithMetric.triangle
+        _ ≤ max (d p.1 q.1) (d p.2 q.2) + (d q.2 r.2) := by
+          gcongr
+          apply le_max_right
+        _ ≤ max (d p.1 q.1) (d p.2 q.2) + max (d q.1 r.1) (d q.2 r.2) := by
+          gcongr
+          apply le_max_right
+
+example (X Y : Type*) [SpaceWithMetric X] [SpaceWithMetric Y] : TopologicalSpace (X × Y) :=
+  inferInstance
+
+example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
+  rw [continuous_prodMk]
+  apply And.intro
+  · apply continuous_snd
+  · apply continuous_fst
+
+#synth TopologicalSpace ℝ
 
 instance : SpaceWithMetric ℝ where
 __ := Structures.RealMetric
 
+#synth TopologicalSpace ℝ
+
 example : Continuous (fun (x : ℝ) ↦ x + 1) := continuous_add_right ..
 
-example : Continuous (fun (⟨x, y⟩ : ℝ × ℝ) ↦ x + y) := continuous_add
 
-example : Continuous (fun n : ℕ × ℕ ↦ (⟨(n.1 : ℝ), (n.2 : ℝ)⟩ : (ℝ × ℝ))) :=
-  continuous_of_discreteTopology
+#synth SpaceWithMetric (ℝ × ℝ)
+instance ProdRealTop : TopologicalSpace (ℝ × ℝ) := @TopOnMetric _ (MetricOnProd ℝ ℝ)
+#synth TopologicalSpace (ℝ × ℝ)
+
+example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
+  rw [continuous_prodMk]
+  apply And.intro
+  · apply continuous_snd
+  · apply continuous_fst
 
 end Classes
