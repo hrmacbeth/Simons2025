@@ -55,6 +55,7 @@ def α : QuadraticAlgebra (37 : ℤ) 42 where
   y := 1
 
 def β : QuadraticAlgebra (37 : ℤ) 42 := {x := -1, y := 1}
+def β' : QuadraticAlgebra (37 : ℤ) 42 := {y := 1, x := -1}
 
 def γ : QuadraticAlgebra (37 : ℤ) 42 := ⟨-1, 1⟩
 
@@ -64,6 +65,7 @@ def δ : QuadraticAlgebra (37 : ℤ) 42 := by
   use 1
 
 example : α = β := rfl
+example : α = β' := rfl
 example : α = γ := rfl
 example : α = δ := rfl
 
@@ -269,12 +271,6 @@ instance TopOnMetric (X : Type*) [HX : SpaceWithMetric X] : TopologicalSpace X :
 -- ### Some problems
 
 example : Continuous (fun (x : ℝ) ↦ x + 1) := continuous_add_right ..
-
-example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
-  simp_all only [continuous_prodMk]
-  apply And.intro
-  · apply continuous_snd
-  · apply continuous_fst
 
 example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
   rw [continuous_prodMk]
