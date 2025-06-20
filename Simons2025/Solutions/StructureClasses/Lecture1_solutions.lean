@@ -3,19 +3,25 @@ Copyright (c) 2025 Filippo A. E. Nuccio. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Filippo A. E. Nuccio
 -/
-import Mathlib.Algebra.Notation.Defs
-import Mathlib.Data.Int.Notation
-import Mathlib.Data.Nat.BinaryRec
 import Mathlib.Topology.MetricSpace.Basic
-import Mathlib.Topology.Algebra.Monoid
-import Mathlib.Logic.Function.Defs
-import Mathlib.Tactic.Simps.Basic
-import Mathlib.Tactic.Linarith
-import Mathlib.Data.Real.Basic
 import Mathlib.Topology.Algebra.Ring.Real
 import Config.Environment
+import Mathlib.Data.NNReal.Defs
+import Mathlib.Data.Nat.Lattice
+import Mathlib.Topology.Defs.Basic
 
 namespace Structures
+
+-- # Defining Structures
+
+whatsnew in
+@[ext]
+structure QuadraticAlgebra (a b : R) where
+  /-- Component of the integer not multiplied by `ω` -/
+  x : R
+  /-- Component of the integer multiplied by `ω` -/
+  y : R
+  deriving DecidableEq
 
 structure HasZero (X : Type*) where
   zero' : X
@@ -24,6 +30,44 @@ export HasZero (zero')
 
 scoped notation "𝟘" => zero' -- type `𝟘` as `\b0`.
 
+structure Magma (X : Type*) where
+  sum : X → X → X
+
+export Magma (sum)
+
+#check Magma.sum
+#print Magma
+
+structure Monoid (X : Type*) extends HasZero X, Magma X where
+  sum_zero (x : X) : sum zero' x = x
+  zero_sum (x : X) : sum x zero' = x
+  sum_assoc (x y z : X) : sum (sum x y) z = sum x (sum y z)
+
+-- *⌘*
+
+
+-- ## Producing terms
+
+-- ### In explicit types
+
+def α : QuadraticAlgebra (37 : ℤ) 42 where
+  x := -1
+  y := 1
+
+def β : QuadraticAlgebra (37 : ℤ) 42 := {x := -1, y := 1}
+
+def γ : QuadraticAlgebra (37 : ℤ) 42 := ⟨-1, 1⟩
+
+def δ : QuadraticAlgebra (37 : ℤ) 42 := by
+  constructor
+  use -1
+  use 1
+
+example : α = β := rfl
+example : α = γ := rfl
+example : α = δ := rfl
+
+-- ### Showing that some explicit type has a structure
 def NatHasZero : HasZero ℕ where
   zero' := 0
 
@@ -34,31 +78,20 @@ def BoolHasZero : HasZero Bool := by
 
 #check (𝟘 BoolHasZero)
 
-structure Magma (X : Type*) where
-  sum : X → X → X
-
-#check Magma.sum
-#print Magma
-
-export Magma (sum)
-
-infix:70 " † " => Magma.sum
-
 def NatMagma : Magma ℕ := ⟨fun n m ↦ n + m⟩
 
 def BoolMagma : Magma Bool where
  sum p q := match p, q with
  | _, _ => true
 
+/-- ### Exercise
+ Put a `Magma` structure on `Prop` using `⋀` as sum. -/
 def PropMagma : Magma Prop := { sum := And }
+
+infix:70 " † " => Magma.sum
 
 #eval NatMagma.sum 3 2
 #eval (NatMagma † 3) 2
-
-structure Monoid (X : Type*) extends HasZero X, Magma X where
-  sum_zero (x : X) : sum zero' x = x
-  zero_sum (x : X) : sum x zero' = x
-  sum_assoc (x y z : X) : sum (sum x y) z = sum x (sum y z)
 
 def NatMonoid : Monoid ℕ where
   zero' := 0
@@ -70,6 +103,8 @@ def NatMonoid : Monoid ℕ where
     rw [Nat.add_eq]
     exact Nat.add_assoc n m l
 
+-- ### Exercise
+/- Define the same `Monoid` structure on `ℕ` using different syntaxes. -/
 def NatMonoid' : Monoid ℕ where
 __ := NatHasZero
 __ := NatMagma
@@ -84,6 +119,8 @@ def NatMonoid'' : Monoid ℕ :=
   zero_sum := add_zero
   }
 
+-- ### Exercise
+/- Put a `Monoid` structure on `Prop` using the above sum. -/
 def PropMonoid : Monoid Prop where
   zero' := True
   sum_zero := true_and
@@ -93,6 +130,8 @@ def PropMonoid : Monoid Prop where
     simp only [eq_iff_iff]
     exact and_assoc
 
+-- ### Exercise
+/- Can you put a `Monoid` structure on `Bool` generalising what we did before?-/
 def BoolMonoid : Monoid Bool :=
 { BoolHasZero, BoolMagma with
   sum_assoc p q r := by
@@ -104,6 +143,9 @@ def BoolMonoid : Monoid Bool :=
   zero_sum := sorry
   }
 
+-- ### Exercise
+/- As an exercise, define a `Semigroup` to be an associative `Magma`, and a
+`Monoid₁` as a Semigroup with `0`.-/
 structure Semigroup (X : Type*) extends Magma X where
   sum_assoc (x y z : X) : sum (sum x y) z = sum x (sum y z)
 
@@ -116,7 +158,12 @@ def NatMonoid₁ : Monoid₁ ℕ where
     simp only [Nat.add_eq]
     exact Nat.add_assoc m n k
 
+-- ### Exercise
+-- Why will this always fail?
 example : NatMonoid = NatMonoid₁ := sorry
+
+-- # Some metric/topology
+
 
 whatsnew in
 structure SpaceWithMetric (X : Type*) where
@@ -135,6 +182,8 @@ def RealMetric : SpaceWithMetric ℝ where
   -- triangle x y z := abs_sub_le x y z
   triangle := abs_sub_le
 
+-- ### Exercise
+-- Define a `SpaceWithMetric` structure on `ℕ`.
 def NatMetric : SpaceWithMetric ℕ where
   d n m := |max n m - min n m|
   dist_eq_zero n := by simp only [max_self, min_self, sub_self, abs_zero]
@@ -187,18 +236,22 @@ def NatMetric : SpaceWithMetric ℕ where
           rw [abs_sub_comm (m : ℝ) _]
           apply abs_sub_le
 
-structure MagmaHom (X Y : Type*) (hX : Magma X) (hY : Magma Y) where
-  toFun : X → Y
-  addFun (x y : X) : toFun (sum hX x y) = sum hY (toFun x) (toFun y)
-
 def RealMagma: Magma ℝ := by --{sum := @Add.add ℝ _}
   constructor
   intro x y
   exact x + y
 
+-- ### Exercise
+-- What is a `Magma` homomorphism? Define it so that the next `def` compiles.
+structure MagmaHom (X Y : Type*) (hX : Magma X) (hY : Magma Y) where
+  toFun : X → Y
+  addFun (x y : X) : toFun (sum hX x y) = sum hY (toFun x) (toFun y)
+
 def coeMagmaHom : MagmaHom ℕ ℝ (NatMagma) (RealMagma) where
   toFun := (↑)
   addFun a b := Nat.cast_add a b
+
+-- A `wrong` approach to "every metric induces a topology"
 
 def metricToTopology (X : Type*) (hX : SpaceWithMetric X) : (TopologicalSpace X) where
   IsOpen := by
@@ -240,33 +293,6 @@ end Structures
 
 namespace Classes
 
-/- Although this "seems to work" there are some points that are blatantly unsatisfactory:
-1. We don't have a notation `†` that works nicely, we need to write `(NatMagma †) 3 2`
-2. Although it is ok to be able to define arbitrary crazy additive structures on `ℕ`, we'd
-like to record that there is a prefered one, whose name we can forget and that Lean remembers.
-3. We would like things to chain automatically: we've defined a topological space on every space
-  with metric, and we could define a metric on every product of metric spaces: but we don't get
-  *automatically* a topology on `X × Y`...
-
-**Type classes** are the solution (in `Lean`, other proof assistants, like `Rocq`, take a different\
-approach). The idea is to build a database of terms of structures (like `NatMonoid : Monoid ℕ` or
-`RealMetric : SpaceWithMetric ℝ`) that can be searched by `Lean` each time that it looks for some
-property or some operation on a type
-
-This will also enable more flexible notation: if Lean will see `3 † 2` it will
-(i) Understand `†` as the function `?α → ?α → ?α` coming from a term `?t : Magma ?α` (where both
-`?a` and `?t` are still to be determined)
-(ii) Realise that `2` and `3` are terms of type `ℕ`, so `?α = ℕ`
-(iii) It follows that `?t` must be a term of type `Magma ℕ`
-(iv) Looking in the database, it will find the term `NatMagma : Magma ℕ` and it will understand
-what `†` in this context mean.
-
-Before moving to the examples, observe that with all good news there are also drawbacks: if we've
-not been careful enough and we've recorded both `NatMagma` and `NatMagma'` as terms in `Magma ℕ`,
-`Lean` will find both of them in the database and will (basically) randomly pick one or the other.
--/
-
-
 class HasZero (X : Type*) where
   zero' : X
 
@@ -302,25 +328,32 @@ class SpaceWithMetric (X : Type*) where
 
 export SpaceWithMetric (d)
 
-instance TopOnMetric (X : Type*) [SpaceWithMetric X] : TopologicalSpace X := by
+instance TopOnMetric (X : Type*) [HX : SpaceWithMetric X] : TopologicalSpace X := by
   have hX : Structures.SpaceWithMetric X := by
-    fconstructor
-    · exact d
+    constructor
     · exact SpaceWithMetric.dist_eq_zero
     · exact SpaceWithMetric.dist_pos
     · exact SpaceWithMetric.symm
     · exact SpaceWithMetric.triangle
   exact (Structures.metricToTopology X hX)
 
-example : Continuous (fun (x : ℝ) ↦ x + 1) := continuous_add_right ..
+-- ### Some problems
 
-example : Continuous (fun (⟨x, y⟩ : ℝ × ℝ) ↦ x + y) := continuous_add
+example : Continuous (fun (x : ℝ) ↦ x + 1) := continuous_add_right ..
 
 example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
   simp_all only [continuous_prodMk]
   apply And.intro
   · apply continuous_snd
   · apply continuous_fst
+
+example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
+  rw [continuous_prodMk]
+  apply And.intro
+  · apply continuous_snd
+  · apply continuous_fst
+
+#synth TopologicalSpace ℝ
 
 instance MetricOnProd (X Y : Type*) [SpaceWithMetric X] [SpaceWithMetric Y] :
     SpaceWithMetric (X × Y) where
@@ -342,7 +375,7 @@ instance MetricOnProd (X Y : Type*) [SpaceWithMetric X] [SpaceWithMetric Y] :
   symm := by simp [SpaceWithMetric.symm]
   triangle := by
     intro p q r
-    simp-- [SpaceWithMetric.triangle]
+    simp
     constructor
     · calc
         d p.1 r.1 ≤ (d p.1 q.1) + (d q.1 r.1) := by apply SpaceWithMetric.triangle
@@ -361,16 +394,6 @@ instance MetricOnProd (X Y : Type*) [SpaceWithMetric X] [SpaceWithMetric Y] :
           gcongr
           apply le_max_right
 
-example (X Y : Type*) [SpaceWithMetric X] [SpaceWithMetric Y] : TopologicalSpace (X × Y) :=
-  inferInstance
-
-example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
-  rw [continuous_prodMk]
-  apply And.intro
-  · apply continuous_snd
-  · apply continuous_fst
-
-#synth TopologicalSpace ℝ
 
 instance : SpaceWithMetric ℝ where
 __ := Structures.RealMetric
@@ -379,10 +402,12 @@ __ := Structures.RealMetric
 
 example : Continuous (fun (x : ℝ) ↦ x + 1) := continuous_add_right ..
 
-
 #synth SpaceWithMetric (ℝ × ℝ)
-instance ProdRealTop : TopologicalSpace (ℝ × ℝ) := @TopOnMetric _ (MetricOnProd ℝ ℝ)
+
+instance : TopologicalSpace (ℝ × ℝ) := @TopOnMetric _ (MetricOnProd ℝ ℝ)
+
 #synth TopologicalSpace (ℝ × ℝ)
+
 
 example : Continuous (fun n : ℝ × ℝ ↦ (⟨n.2, n.1⟩ : (ℝ × ℝ))) := by
   rw [continuous_prodMk]
