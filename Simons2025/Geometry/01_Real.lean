@@ -20,13 +20,8 @@ open MulAction hiding toSMul
 
 /-! ## Problem 1 -/
 
-abbrev addRight (a : ℝ) : Perm ℝ where
-  toFun := fun x ↦ x + a
-  invFun := fun x ↦ x - a
-  left_inv := by
-    sorry
-  right_inv := by
-    sorry
+abbrev addRight (a : ℝ) : Perm ℝ :=
+_
 
 /-- If, for some given real number `a`, `α` is the element `x ↦ x + a` of `Perm ℝ`, prove that, for
 any two real numbers `x` and `y`, `x - y = α x - α y`. -/
@@ -225,4 +220,3 @@ theorem IsSimilarity.exists_eq_mulLeftAddRight {α : Perm ℝ} (h : IsSimilarity
 of R. -/
 example (α : A) : α ∈ stabilizer A (0:ℝ) ↔ ∃ (a : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a 0 ha := by
   sorry
-
