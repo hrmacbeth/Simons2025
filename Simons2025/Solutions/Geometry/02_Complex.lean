@@ -11,7 +11,7 @@ import Config.Environment
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn
 
-Chapter 3, problems 13-38: Groups of permutations of `ℂ`
+Chapter 3, problems 13-17: Groups of permutations of `ℂ`, part 1
 -/
 
 lftcm_init
@@ -19,7 +19,6 @@ noncomputable section
 
 open Equiv
 open Complex (I exp exp_add exp_zero re im)
-open MulAction hiding toSMul
 
 /-! ## Problem 13 -/
 
@@ -169,7 +168,7 @@ abbrev rotation (θ : ℝ) : Perm ℂ where
     -- sorry --
 
 /-- rotations about `0` are isometries of the plane. -/
-example (θ : ℝ) : IsIsometry (rotation θ) := by
+theorem isIsometry_rotation (θ : ℝ) : IsIsometry (rotation θ) := by
   -- sorry --
   intro z w
   dsimp
@@ -249,7 +248,7 @@ example : { z | α z = z } = { z : ℂ | z.im = 0 } := by
   -- sorry --
   ext z
   dsimp
-  suffices _ ↔ (z.im : ℂ) = 0 from mod_cast this -- FIXME `cify`?
+  cify
   rw [Complex.im_eq_sub_conj]
   constructor
   · intro h
@@ -274,19 +273,23 @@ example (p w : ℂ) (hw : w ∈ { z | α z = z }) : ‖p - w‖ = ‖α p - w‖
         rw [map_sub, hw]
   -- sorry --
 
-/-- `α` is an isometry fixing the points 0 and 1. -/
-example : IsIsometry α ∧ α 0 = 0 ∧ α 1 = 1 := by
+/-- `α` is an isometry. -/
+theorem isIsometry_reflectReal : IsIsometry α := by
   -- sorry --
   dsimp [IsIsometry]
-  constructor
-  · intro z w
-    calc
-      ‖conj z - conj w‖ = ‖α (z - w)‖ := by
-          dsimp
-          rw [map_sub]
-      _ = ‖z - w‖ := by
-          dsimp
-          rw [Complex.norm_conj]
+  intro z w
+  calc
+    ‖conj z - conj w‖ = ‖α (z - w)‖ := by
+        dsimp
+        rw [map_sub]
+    _ = ‖z - w‖ := by
+        dsimp
+        rw [Complex.norm_conj]
+  -- sorry --
+
+/-- `α` fixes the points 0 and 1. -/
+example : α 0 = 0 ∧ α 1 = 1 := by
+  -- sorry --
   constructor
   · norm_num
   · norm_num
